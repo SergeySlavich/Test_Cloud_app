@@ -1,0 +1,31 @@
+# поддерживаемая версия плагина для docker-compose
+version: '3.5'
+
+# сервисы (т.е. конфиги для контейнеров,)
+services:
+  # контейнер СУБД
+  countrydictionaryapiapp:
+    image: countrydictionaryapiapp
+    build:
+      context: .
+      dockerfile: CountryDictionaryApiApp/Dockerfile
+    ports:
+      - 8000:8080
+    networks:
+      - internal
+
+# описание сетей между контейнерами
+countrydictionaryapidb:
+    image: postgres:latest
+    container_name: countrydictionaryapidb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
